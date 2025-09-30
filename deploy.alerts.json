@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "logAnalyticsWorkspaceName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Log Analytics workspace."
+            }
+        },
+        "alertName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the alert."
+            }
+        }
+    },
+    "resources": [
+    {
+        "name": "AIDRG-Alert",
+        "type": "Microsoft.Insights/scheduledQueryRules",
+        "apiVersion": "2021-08-01",
+        "location": "eastus2",
+        "tags": {},
+        "kind": "LogAlert",
+        "properties": {
+            "displayName": "[parameters('alertName')]",
+            "description": "",
+            "severity": 3,
+            "enabled": true,
+            "evaluationFrequency": "PT5M",
+            "scopes": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logAnalyticsWorkspaceName'))]"
+            ],
+            "targetResourceTypes": [
+                "Microsoft.OperationalInsights/workspaces"
+            ],
+            "windowSize": "PT5M",
+            "criteria": {
+                "allOf": [
+                    {
+                        "query": "AIDRG_Interactions| where Alert == 'true'",
+                        "timeAggregation": "Count",
+                        "dimensions": [],
+                        "operator": "GreaterThan",
+                        "threshold": 0,
+                        "failingPeriods": {
+                            "numberOfEvaluationPeriods": 1,
+                            "minFailingPeriodsToAlert": 1
+                        }
+                    }
+                ]
+            },
+            "autoMitigate": false
+        }
+        
+    }
+
+    ]
+}

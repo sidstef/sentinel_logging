@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspace": {
+            "type": "String"
+        },
+        "alert-rule-name": {
+            "type": "String"
+        }
+    },
+    "resources": [
+        {            
+            "name": "[concat(parameters('workspace'),'/Microsoft.SecurityInsights/', parameters('alert-rule-name'))]",
+            "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+            "kind": "NRT",
+            "apiVersion": "2023-12-01-preview",
+            "properties": {
+                "displayName": "[parameters('alert-rule-name')]",
+                "description": "",
+                "severity": "Medium",
+                "enabled": true,
+                "query": "AIDRGInteractionsLogs | where Alert == 'true'",
+                "suppressionDuration": "PT5H",
+                "suppressionEnabled": false,
+                "tactics": [],
+                "techniques": [],
+                "subTechniques": [],
+                "alertRuleTemplateName": null,
+                "incidentConfiguration": {
+                    "createIncident": true,
+                    "groupingConfiguration": {
+                        "enabled": false,
+                        "reopenClosedIncident": false,
+                        "lookbackDuration": "PT5H",
+                        "matchingMethod": "AllEntities",
+                        "groupByEntities": [],
+                        "groupByAlertDetails": [],
+                        "groupByCustomDetails": []
+                    }
+                },
+                "eventGroupingSettings": {
+                    "aggregationKind": "SingleAlert"
+                },
+                "alertDetailsOverride": {
+                    "alertDynamicProperties": []
+                },
+                "customDetails": {
+                    "Prompt": "Inputs",
+                    "Response": "Response",
+                    "FullInput": "FullInputs",
+                    "Model": "Model",
+                    "BlockedReasons": "BlockedReasons",
+                    "Policy": "Policy",
+                    "Frameworks": "Frameworks"
+                },
+                "entityMappings": null,
+                "sentinelEntitiesMappings": null,
+                "templateVersion": null
+            }
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "workspaceName": {
+            "value": "<your-workspace-name>" 
+        },
+        "functionName": {
+            "value": "AIDRG_Interactions_Logs"
+        },
+        "location": {
+            "value": "<region>" 
+        },
+        "functionDisplayName": {
+            "value": "AIDRG_Interactions_Logs" 
+        },
+        "category": {
+            "value": "AIDRG" 
+        },
+        "query": {
+            "value": "ContainerLogV2 | where LogLevel == \"info\" | extend LogData = parse_json(LogMessage) | where isnotempty(LogData.inputs) | extend Alert = tostring(LogData.alert), Blocked = tostring(LogData.blocked), BlockedReasons = tostring(LogData.blocked_reasons), Categories = tostring(LogData.categories), Event = tostring(LogData.event), EventID = tostring(LogData.event_id), Frameworks = tostring(LogData.frameworks), Inputs = tostring(LogData.inputs), Response = tostring(LogData.response), FullInputs = tostring(LogData.modified_input), Model = tostring(LogData.model), Provider = tostring(LogData.provider), Policy = tostring(LogData.policy), Results = tostring(LogData.results), Verdict = tostring(LogData.verdict), Timestamp = tostring(LogData.timestamp) | project Timestamp, Alert, Blocked, BlockedReasons, Categories, Event, EventID, Frameworks, Inputs, Response, FullInputs, Model, Provider, Policy, Results, Verdict"
+        },
+        "functionAlias": {
+            "value": "AIDRGInteractionsLogs" 
+        }
+    }
+}
